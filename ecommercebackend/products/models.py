@@ -1,3 +1,7 @@
+"""
+Contains models related to product
+"""
+
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import (
     Model,
@@ -17,10 +21,14 @@ from django.utils.translation import gettext_lazy as _
 
 class Product(Model):
     """
-    Stores products' common infos like name, description etc.
+    Stores product's common infos like name, description etc.
     """
 
     class Currency(TextChoices):
+        """
+        Contains currency choices for prices
+        """
+
         USD = "USD", "$"
         EUR = "EUR", "€"
         TRY = "TRY", "₺"
@@ -59,7 +67,7 @@ class Product(Model):
 
 class ProductVariant(Model):
     """
-    Stores products' non-common infos like price, stock etc.
+    Stores product's non-common infos like price, stock etc.
     """
 
     product = ForeignKey(Product, on_delete=CASCADE, related_name="variants")
