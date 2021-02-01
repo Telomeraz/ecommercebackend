@@ -74,7 +74,6 @@ class ProductVariant(Model):
 
     barcode = CharField(
         blank=True,
-        null=True,
         max_length=255,
         verbose_name=_("Barcode"),
     )
