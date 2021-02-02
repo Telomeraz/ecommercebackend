@@ -1,28 +1,16 @@
-from django.core.validators import MinValueValidator, MaxValueValidator
-from django.db.models import (
-    Model,
-    CharField,
-    TextField,
-    BooleanField,
-    PositiveSmallIntegerField,
-    PositiveIntegerField,
-    ForeignKey,
-    DecimalField,
-    TextChoices,
-    CASCADE,
-    DateTimeField,
-)
+from django.core import validators
+from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from .managers import ProductManager, ProductVariantManager
+from . import managers
 
 
-class Product(Model):
+class Product(models.Model):
     """
     Stores product's common infos like name, description etc.
     """
 
-    class Currency(TextChoices):
+    class Currency(models.TextChoices):
         """
         Contains currency choices for prices
         """
@@ -31,32 +19,32 @@ class Product(Model):
         EUR = "EUR", "€"
         TRY = "TRY", "₺"
 
-    name = CharField(max_length=255, verbose_name=_("Product name"))
+    name = models.CharField(max_length=255, verbose_name=_("Product name"))
 
-    subheading = CharField(max_length=255, blank=True, verbose_name=_("Product subheading"))
+    subheading = models.CharField(max_length=255, blank=True, verbose_name=_("Product subheading"))
 
-    description = TextField(blank=True, verbose_name=_("Product description"))
+    description = models.TextField(blank=True, verbose_name=_("Product description"))
 
-    currency = CharField(
+    currency = models.CharField(
         max_length=3,
         choices=Currency.choices,
         default=Currency.TRY,
         verbose_name=_("Currency"),
     )
 
-    tax_rate = PositiveSmallIntegerField(
-        validators=(MaxValueValidator(100),),
+    tax_rate = models.PositiveSmallIntegerField(
+        validators=(validators.MaxValueValidator(100),),
         verbose_name=_("Price tax rate"),
     )
 
-    created_datetime = DateTimeField(auto_now_add=True, verbose_name=_("Created Date and Time"))
+    created_datetime = models.DateTimeField(auto_now_add=True, verbose_name=_("Created Date and Time"))
 
-    is_active = BooleanField(default=True, verbose_name=_("Is product active?"))
+    is_active = models.BooleanField(default=True, verbose_name=_("Is product active?"))
 
-    is_archived = BooleanField(default=False)
+    is_archived = models.BooleanField(default=False)
 
-    objects = ProductManager()
-    all_objects = ProductManager(all_objects=True)
+    objects = managers.ProductManager()
+    all_objects = managers.ProductManager(all_objects=True)
 
     class Meta:
         verbose_name = _("Product")
@@ -66,58 +54,58 @@ class Product(Model):
         return self.name
 
 
-class ProductVariant(Model):
+class ProductVariant(models.Model):
     """
     Stores product's non-common infos like price, stock etc.
     """
 
-    product = ForeignKey(Product, on_delete=CASCADE, related_name="variants")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="variants")
 
-    barcode = CharField(
+    barcode = models.CharField(
         blank=True,
         max_length=255,
         verbose_name=_("Barcode"),
     )
 
-    price = DecimalField(
+    price = models.DecimalField(
         decimal_places=2,
         max_digits=12,
-        validators=(MinValueValidator(0),),
+        validators=(validators.MinValueValidator(0),),
         verbose_name=_("Price"),
     )
 
-    purchase_price = DecimalField(
+    purchase_price = models.DecimalField(
         default=None,
         blank=True,
         null=True,
         decimal_places=2,
         max_digits=12,
-        validators=(MinValueValidator(0),),
+        validators=(validators.MinValueValidator(0),),
         verbose_name=_("Purchase price"),
     )
 
-    list_price = DecimalField(
+    list_price = models.DecimalField(
         default=None,
         blank=True,
         null=True,
         decimal_places=2,
         max_digits=12,
-        validators=(MinValueValidator(0),),
+        validators=(validators.MinValueValidator(0),),
         verbose_name=_("List price"),
     )
 
-    stock = PositiveIntegerField(default=0, verbose_name=_("Stock"))
+    stock = models.PositiveIntegerField(default=0, verbose_name=_("Stock"))
 
-    created_datetime = DateTimeField(auto_now_add=True, verbose_name=_("Created Date and Time"))
+    created_datetime = models.DateTimeField(auto_now_add=True, verbose_name=_("Created Date and Time"))
 
-    is_primary = BooleanField(default=False, verbose_name=_("Is variant primary?"))
+    is_primary = models.BooleanField(default=False, verbose_name=_("Is variant primary?"))
 
-    is_active = BooleanField(default=True, verbose_name=_("Is variant active?"))
+    is_active = models.BooleanField(default=True, verbose_name=_("Is variant active?"))
 
-    is_archived = BooleanField(default=False)
+    is_archived = models.BooleanField(default=False)
 
-    objects = ProductVariantManager()
-    all_objects = ProductVariantManager(all_objects=True)
+    objects = managers.ProductVariantManager()
+    all_objects = managers.ProductVariantManager(all_objects=True)
 
     class Meta:
         verbose_name = _("Product variant")

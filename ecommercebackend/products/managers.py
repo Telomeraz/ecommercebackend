@@ -1,7 +1,7 @@
-from django.db.models import Manager
+from django.db import models
 
 
-class BaseManager(Manager):
+class BaseManager(models.Manager):
     """
     A custom manager that filters common fields
     """
@@ -11,6 +11,9 @@ class BaseManager(Manager):
 
     @staticmethod
     def filter_archived(queryset):
+        """
+        Filters queryset by is_archived field
+        """
         return queryset.exclude(is_archived=True)
 
     def get_queryset(self):
