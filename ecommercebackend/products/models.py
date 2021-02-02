@@ -14,6 +14,8 @@ from django.db.models import (
 )
 from django.utils.translation import gettext_lazy as _
 
+from .managers import ProductManager, ProductVariantManager
+
 
 class Product(Model):
     """
@@ -52,6 +54,9 @@ class Product(Model):
     is_active = BooleanField(default=True, verbose_name=_("Is product active?"))
 
     is_archived = BooleanField(default=False)
+
+    objects = ProductManager()
+    all_objects = ProductManager(all_objects=True)
 
     class Meta:
         verbose_name = _("Product")
@@ -110,6 +115,9 @@ class ProductVariant(Model):
     is_active = BooleanField(default=True, verbose_name=_("Is variant active?"))
 
     is_archived = BooleanField(default=False)
+
+    objects = ProductVariantManager()
+    all_objects = ProductVariantManager(all_objects=True)
 
     class Meta:
         verbose_name = _("Product variant")
