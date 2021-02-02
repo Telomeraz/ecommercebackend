@@ -1,7 +1,3 @@
-"""
-Contains models related to product
-"""
-
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import (
     Model,

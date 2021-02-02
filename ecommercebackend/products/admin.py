@@ -1,7 +1,3 @@
-"""
-Contains admin pages of models in :module:`products.models`
-"""
-
 from django.contrib import admin
 
 from .models import Product, ProductVariant
