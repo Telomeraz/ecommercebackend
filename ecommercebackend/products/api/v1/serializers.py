@@ -20,7 +20,7 @@ class ProductVariantSerializer(ModelSerializer):
 
 
 class ProductSerializer(ModelSerializer):
-    variants = ProductVariantSerializer(many=True, read_only=True)
+    variants = ProductVariantSerializer(many=True)
 
     class Meta:
         model = Product
@@ -35,3 +35,8 @@ class ProductSerializer(ModelSerializer):
             "created_datetime",
             "is_active",
         )
+
+    def create(self, validated_data):
+        variants = validated_data.pop('variants')
+        product = Product.objects.create(validated_data, variants=variants)
+        return product
