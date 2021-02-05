@@ -19,9 +19,7 @@ class ProductVariantSerializer(ModelSerializer):
         )
 
 
-class ProductSerializer(ModelSerializer):
-    variants = ProductVariantSerializer(many=True)
-
+class BaseProductSerializer(ModelSerializer):
     class Meta:
         model = Product
         fields = (
@@ -36,7 +34,15 @@ class ProductSerializer(ModelSerializer):
             "is_active",
         )
 
+
+class ListCreateProductSerializer(BaseProductSerializer):
+    variants = ProductVariantSerializer(many=True)
+
     def create(self, validated_data):
-        variants = validated_data.pop('variants')
+        variants = validated_data.pop("variants")
         product = Product.objects.create(validated_data, variants=variants)
         return product
+
+
+class UpdateProductSerializer(BaseProductSerializer):
+    variants = ProductVariantSerializer(many=True, read_only=True, required=False)
