@@ -12,7 +12,7 @@ class Product(models.Model):
 
     class Currency(models.TextChoices):
         """
-        Contains currency choices for prices
+        Contains currency choices for prices.
         """
 
         USD = "USD", "$"
@@ -41,7 +41,10 @@ class Product(models.Model):
 
     is_active = models.BooleanField(default=True, verbose_name=_("Is product active?"))
 
-    is_archived = models.BooleanField(default=False)
+    is_archived = models.BooleanField(
+        default=False,
+        help_text="This is a flag that represents whether deleted. True means deleted.",
+    )
 
     objects = managers.ProductManager()
     all_objects = managers.ProductManager(all_objects=True)
@@ -52,6 +55,15 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+    def archive(self):
+        """
+        Archives instance of the model and its variants.
+        """
+        self.is_archived = True
+        self.save()
+        product_variants = self.variants
+        product_variants.archive()
 
 
 class ProductVariant(models.Model):
@@ -102,7 +114,10 @@ class ProductVariant(models.Model):
 
     is_active = models.BooleanField(default=True, verbose_name=_("Is variant active?"))
 
-    is_archived = models.BooleanField(default=False)
+    is_archived = models.BooleanField(
+        default=False,
+        help_text="This is a flag that represents whether deleted. True means deleted.",
+    )
 
     objects = managers.ProductVariantManager()
     all_objects = managers.ProductVariantManager(all_objects=True)
@@ -113,3 +128,10 @@ class ProductVariant(models.Model):
 
     def __str__(self):
         return self.product.name
+
+    def archive(self):
+        """
+        Archives instance of the model.
+        """
+        self.is_archived = True
+        self.save()
