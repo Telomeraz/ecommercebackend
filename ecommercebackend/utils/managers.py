@@ -10,8 +10,7 @@ class BaseManager(models.Manager):
         self.all_objects = kwargs.pop("all_objects", False)
         super().__init__(*args, **kwargs)
 
-    @staticmethod
-    def filter_archived(queryset):
+    def _filter_archived(self, queryset):
         """
         Filters queryset by is_archived field
         """
@@ -21,4 +20,4 @@ class BaseManager(models.Manager):
         queryset = super().get_queryset()
         if self.all_objects:
             return queryset
-        return self.filter_archived(queryset)
+        return self._filter_archived(queryset)
