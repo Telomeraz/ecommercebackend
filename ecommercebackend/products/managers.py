@@ -1,29 +1,5 @@
-from django.db import models
-
-from . import models as product_models
-
-
-class BaseManager(models.Manager):
-    """
-    Custom manager that filters common fields.
-    """
-
-    def __init__(self, *args, **kwargs):
-        self.all_objects = kwargs.pop("all_objects", False)
-        super().__init__(*args, **kwargs)
-
-    @staticmethod
-    def filter_archived(queryset):
-        """
-        Filters queryset by is_archived field
-        """
-        return queryset.exclude(is_archived=True)
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        if self.all_objects:
-            return queryset
-        return self.filter_archived(queryset)
+from . import models
+from utils.managers import BaseManager
 
 
 class ProductManager(BaseManager):
@@ -39,7 +15,7 @@ class ProductManager(BaseManager):
         product = self.model(**product)
         product.save()
         for variant in variants:
-            product_models.ProductVariant.objects.create(
+            models.ProductVariant.objects.create(
                 variant=variant,
                 product=product,
             )
