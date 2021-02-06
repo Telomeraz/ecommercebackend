@@ -56,14 +56,14 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
-    def archive(self):
+    def do_archive(self):
         """
         Archives instance of the model and its variants.
         """
         self.is_archived = True
         self.save()
         product_variants = self.variants
-        product_variants.archive()
+        product_variants.do_archive()
 
 
 class ProductVariant(models.Model):
@@ -129,7 +129,7 @@ class ProductVariant(models.Model):
     def __str__(self):
         return self.product.name
 
-    def archive(self):
+    def do_archive(self):
         """
         Archives instance of the model.
         """

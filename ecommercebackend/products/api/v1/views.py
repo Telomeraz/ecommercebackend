@@ -49,5 +49,5 @@ class DeleteProductView(DestroyAPIView):
 
     def delete(self, request, *args, **kwargs):
         product = self.get_object()
-        product.archive()
+        product.do_archive()
         return Response(status=HTTP_204_NO_CONTENT)

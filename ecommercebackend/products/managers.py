@@ -60,9 +60,9 @@ class ProductVariantManager(BaseManager):
         variant.save()
         return variant
 
-    def archive(self, *args, **kwargs):
+    def do_archive(self, *args, **kwargs):
         """
         Archives all instances of :model:`products.ProductVariant`.
         """
         for product_variant in self.all():
-            product_variant.archive()
+            product_variant.do_archive()
