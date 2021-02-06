@@ -1,16 +1,15 @@
 from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
-from rest_framework.authentication import BasicAuthentication
-from rest_framework.permissions import IsAdminUser
 from rest_framework.status import HTTP_204_NO_CONTENT
 from rest_framework.response import Response
 
-from ...models import Product, ProductVariant
+from products.models import Product, ProductVariant
 from .serializers import (
     ListCreateProductSerializer,
     UpdateProductSerializer,
     CreateProductVariantSerializer,
     UpdateProductVariantSerializer,
 )
+from utils.views import Authentication, SuperuserPermission
 
 
 class ListProductView(ListAPIView):
@@ -22,34 +21,28 @@ class ListProductView(ListAPIView):
     serializer_class = ListCreateProductSerializer
 
 
-class CreateProductView(CreateAPIView):
+class CreateProductView(Authentication, SuperuserPermission, CreateAPIView):
     """
     API endpoint that allows products to be created.
     """
 
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAdminUser,)
     serializer_class = ListCreateProductSerializer
 
 
-class UpdateProductView(UpdateAPIView):
+class UpdateProductView(Authentication, SuperuserPermission, UpdateAPIView):
     """
     API endpoint that allows products to be updated.
     """
 
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAdminUser,)
     queryset = Product.objects.all().order_by("-created_datetime")
     serializer_class = UpdateProductSerializer
 
 
-class DeleteProductView(DestroyAPIView):
+class DeleteProductView(Authentication, SuperuserPermission, DestroyAPIView):
     """
     API endpoint that allows products to be deleted.
     """
 
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAdminUser,)
     queryset = Product.objects.all().order_by("-created_datetime")
 
     def delete(self, request, *args, **kwargs):
@@ -58,34 +51,28 @@ class DeleteProductView(DestroyAPIView):
         return Response(status=HTTP_204_NO_CONTENT)
 
 
-class CreateProductVariantView(CreateAPIView):
+class CreateProductVariantView(Authentication, SuperuserPermission, CreateAPIView):
     """
     API endpoint that allows product variants to be created.
     """
 
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAdminUser,)
     serializer_class = CreateProductVariantSerializer
 
 
-class UpdateProductVariantView(UpdateAPIView):
+class UpdateProductVariantView(Authentication, SuperuserPermission, UpdateAPIView):
     """
     API endpoint that allows product variants to be updated.
     """
 
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAdminUser,)
     queryset = ProductVariant.objects.all().order_by("-created_datetime")
     serializer_class = UpdateProductVariantSerializer
 
 
-class DeleteProductVariantView(DestroyAPIView):
+class DeleteProductVariantView(Authentication, SuperuserPermission, DestroyAPIView):
     """
     API endpoint that allows product variants to be deleted.
     """
 
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAdminUser,)
     queryset = ProductVariant.objects.all().order_by("-created_datetime")
 
     def delete(self, request, *args, **kwargs):
