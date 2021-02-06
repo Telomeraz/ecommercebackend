@@ -4,8 +4,13 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.status import HTTP_204_NO_CONTENT
 from rest_framework.response import Response
 
-from ...models import Product
-from .serializers import ListCreateProductSerializer, UpdateProductSerializer, CreateProductVariantSerializer
+from ...models import Product, ProductVariant
+from .serializers import (
+    ListCreateProductSerializer,
+    UpdateProductSerializer,
+    CreateProductVariantSerializer,
+    UpdateProductVariantSerializer,
+)
 
 
 class ListProductView(ListAPIView):
@@ -61,3 +66,14 @@ class CreateProductVariantView(CreateAPIView):
     authentication_classes = (BasicAuthentication,)
     permission_classes = (IsAdminUser,)
     serializer_class = CreateProductVariantSerializer
+
+
+class UpdateProductVariantView(UpdateAPIView):
+    """
+    API endpoint that allows product variants to be updated.
+    """
+
+    authentication_classes = (BasicAuthentication,)
+    permission_classes = (IsAdminUser,)
+    queryset = ProductVariant.objects.all().order_by("-created_datetime")
+    serializer_class = UpdateProductVariantSerializer

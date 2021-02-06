@@ -5,7 +5,7 @@ from rest_framework.serializers import ModelSerializer, IntegerField
 from ...models import Product, ProductVariant
 
 
-class ProductVariantSerializer(ModelSerializer):
+class BaseProductVariantSerializer(ModelSerializer):
     class Meta:
         model = ProductVariant
         fields = (
@@ -48,7 +48,7 @@ class ListCreateProductSerializer(BaseProductSerializer):
     fields for listing and creating products.
     """
 
-    variants = ProductVariantSerializer(many=True)
+    variants = BaseProductVariantSerializer(many=True)
 
     def create(self, validated_data):
         """
@@ -61,11 +61,10 @@ class ListCreateProductSerializer(BaseProductSerializer):
 
 class UpdateProductSerializer(BaseProductSerializer):
     """
-    Serializes :model:`products.Product` fields for listing and creating
-    products.
+    Serializes :model:`products.Product` fields for updating products.
     """
 
-    variants = ProductVariantSerializer(many=True, read_only=True, required=False)
+    variants = BaseProductVariantSerializer(many=True, read_only=True, required=False)
 
 
 class CreateProductVariantSerializer(ModelSerializer):
@@ -113,3 +112,12 @@ class CreateProductVariantSerializer(ModelSerializer):
 
         attrs["product"] = product
         return attrs
+
+
+class UpdateProductVariantSerializer(BaseProductVariantSerializer):
+    """
+    Serializes :model:`products.ProductVariant` fields for updating product
+    variants.
+    """
+
+    pass
