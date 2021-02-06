@@ -3,9 +3,10 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from . import managers
+from utils.models import BaseArchive
 
 
-class Product(models.Model):
+class Product(BaseArchive):
     """
     Stores product's common infos like name, description etc.
     """
@@ -41,11 +42,6 @@ class Product(models.Model):
 
     is_active = models.BooleanField(default=True, verbose_name=_("Is product active?"))
 
-    is_archived = models.BooleanField(
-        default=False,
-        help_text="This is a flag that represents whether deleted. True means deleted.",
-    )
-
     objects = managers.ProductManager()
     all_objects = managers.ProductManager(all_objects=True)
 
@@ -60,13 +56,12 @@ class Product(models.Model):
         """
         Archives instance of the model and its variants.
         """
-        self.is_archived = True
-        self.save()
+        super().do_archive()
         product_variants = self.variants
         product_variants.do_archive()
 
 
-class ProductVariant(models.Model):
+class ProductVariant(BaseArchive):
     """
     Stores product's non-common infos like price, stock etc.
     """
@@ -114,11 +109,6 @@ class ProductVariant(models.Model):
 
     is_active = models.BooleanField(default=True, verbose_name=_("Is variant active?"))
 
-    is_archived = models.BooleanField(
-        default=False,
-        help_text="This is a flag that represents whether deleted. True means deleted.",
-    )
-
     objects = managers.ProductVariantManager()
     all_objects = managers.ProductVariantManager(all_objects=True)
 
@@ -128,10 +118,3 @@ class ProductVariant(models.Model):
 
     def __str__(self):
         return self.product.name
-
-    def do_archive(self):
-        """
-        Archives instance of the model.
-        """
-        self.is_archived = True
-        self.save()
