@@ -77,3 +77,18 @@ class UpdateProductVariantView(UpdateAPIView):
     permission_classes = (IsAdminUser,)
     queryset = ProductVariant.objects.all().order_by("-created_datetime")
     serializer_class = UpdateProductVariantSerializer
+
+
+class DeleteProductVariantView(DestroyAPIView):
+    """
+    API endpoint that allows product variants to be deleted.
+    """
+
+    authentication_classes = (BasicAuthentication,)
+    permission_classes = (IsAdminUser,)
+    queryset = ProductVariant.objects.all().order_by("-created_datetime")
+
+    def delete(self, request, *args, **kwargs):
+        product_variant = self.get_object()
+        product_variant.do_archive()
+        return Response(status=HTTP_204_NO_CONTENT)
