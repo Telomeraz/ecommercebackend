@@ -6,6 +6,60 @@ from . import managers
 from utils.models import BaseArchive
 
 
+class BaseAttribute(models.Model):
+    """
+    Base abstract model for attributes and its values.
+    """
+
+    name = models.CharField(max_length=255)
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return self.name
+
+
+class Attribute(BaseAttribute):
+    """
+    Stores non-varianter attributes.
+    """
+
+    pass
+
+
+class AttributeValue(BaseAttribute):
+    """
+    Stores non-varianter attribute values.
+    """
+
+    attribute = models.ForeignKey(
+        Attribute,
+        on_delete=models.CASCADE,
+        related_name="values",
+    )
+
+
+class VarianterAttribute(BaseAttribute):
+    """
+    Stores varianter attributes.
+    """
+
+    pass
+
+
+class VarianterAttributeValue(BaseAttribute):
+    """
+    Stores non-varianter attribute values.
+    """
+
+    varianter_attribute = models.ForeignKey(
+        VarianterAttribute,
+        on_delete=models.CASCADE,
+        related_name="varianter_values",
+    )
+
+
 class Product(BaseArchive):
     """
     Stores product's common infos like name, description etc.
@@ -37,6 +91,8 @@ class Product(BaseArchive):
         validators=(validators.MaxValueValidator(100),),
         verbose_name=_("Price tax rate"),
     )
+
+    values = models.ManyToManyField(AttributeValue, blank=True, related_name="products")
 
     created_datetime = models.DateTimeField(auto_now_add=True, verbose_name=_("Created Date and Time"))
 
@@ -102,6 +158,8 @@ class ProductVariant(BaseArchive):
     )
 
     stock = models.PositiveIntegerField(default=0, verbose_name=_("Stock"))
+
+    values = models.ManyToManyField(VarianterAttributeValue, blank=True, related_name="product_variants")
 
     created_datetime = models.DateTimeField(auto_now_add=True, verbose_name=_("Created Date and Time"))
 
