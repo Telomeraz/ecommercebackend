@@ -2,7 +2,7 @@ from django.http import Http404
 
 from rest_framework.serializers import ModelSerializer, IntegerField, CharField
 
-from ...models import (
+from products.models import (
     Product,
     ProductVariant,
     Attribute,
@@ -10,6 +10,8 @@ from ...models import (
     VarianterAttribute,
     VarianterAttributeValue,
 )
+
+from .validators import validate_attribute_values, validate_varianter_attribute_values
 
 
 class AttributeSerializer(ModelSerializer):
@@ -119,56 +121,12 @@ class ListCreateProductSerializer(BaseProductSerializer):
         product = Product.objects.create(product=validated_data)
         return product
 
-    def _validate_attribute_values(self, attrs):
-        """
-        Validates attribute values and if they're valid, replaces attribute
-        values ids with objects of :model:`products.AttributeValue` for
-        product.
-        """
-        values = attrs.pop("values", [])
-        attribute_values = []
-        for value in values:
-            attribute = value.get("attribute")
-            try:
-                attribute_value = AttributeValue.objects.get(
-                    id=value.get("id"),
-                    attribute_id=attribute.get("id"),
-                )
-            except AttributeValue.DoesNotExist:
-                raise Http404
-            attribute_values.append(attribute_value)
-        attrs["attribute_values"] = attribute_values
-        return attrs
-
-    def _validate_varianter_attribute_values(self, attrs):
-        """
-        Validates varianter attribute values and if they're valid, replaces
-        varianter attribute values ids with objects of
-        :model:`products.VarianterAttributeValue` for variants.
-        """
-        variants = attrs.get("variants")
-        for variant in variants:
-            varianter_attribute_values = []
-            values = variant.pop("values", [])
-            for value in values:
-                varianter_attribute = value.get("varianter_attribute")
-                try:
-                    varianter_attribute_value = VarianterAttributeValue.objects.get(
-                        id=value.get("id"),
-                        varianter_attribute_id=varianter_attribute.get("id"),
-                    )
-                except VarianterAttributeValue.DoesNotExist:
-                    raise Http404
-                varianter_attribute_values.append(varianter_attribute_value)
-            variant["varianter_attribute_values"] = varianter_attribute_values
-        return attrs
-
     def validate(self, attrs):
         """
         Validates received attrs (dict).
         """
-        attrs = self._validate_attribute_values(attrs)
-        attrs = self._validate_varianter_attribute_values(attrs)
+        attrs = validate_attribute_values(attrs)
+        attrs = validate_varianter_attribute_values(attrs)
         return attrs
 
 
@@ -178,6 +136,14 @@ class UpdateProductSerializer(BaseProductSerializer):
     """
 
     variants = BaseProductVariantSerializer(many=True, read_only=True, required=False)
+
+    def update(self, instance, validated_data):
+        instance.update(validated_data)
+        return instance
+
+    def validate(self, attrs):
+        attrs = validate_attribute_values(attrs)
+        return attrs
 
 
 class CreateProductVariantSerializer(ModelSerializer):

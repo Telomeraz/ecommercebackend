@@ -108,6 +108,13 @@ class Product(BaseArchive):
     def __str__(self):
         return self.name
 
+    def update(self, data):
+        attribute_values = data.pop("attribute_values", [])
+        for key, value in data.items():
+            setattr(self, key, value)
+        self.save()
+        self.values.add(*attribute_values)
+
     def do_archive(self):
         """
         Archives instance of the model and its variants.
