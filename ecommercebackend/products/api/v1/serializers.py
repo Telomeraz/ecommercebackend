@@ -1,6 +1,7 @@
-from django.http import Http404
+from django.utils.translation import gettext_lazy as _
 
 from rest_framework.serializers import ModelSerializer, IntegerField, CharField
+from rest_framework.validators import ValidationError
 
 from products.models import (
     Product,
@@ -187,7 +188,7 @@ class CreateProductVariantSerializer(ModelSerializer):
         try:
             product = Product.objects.get(id=product_id)
         except Product.DoesNotExist:
-            raise Http404
+            raise ValidationError(_("Product not found with id %s" % product_id))
 
         attrs["product"] = product
         return attrs

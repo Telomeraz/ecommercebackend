@@ -1,4 +1,6 @@
-from django.http import Http404
+from django.utils.translation import gettext_lazy as _
+
+from rest_framework.validators import ValidationError
 
 from products.models import AttributeValue, VarianterAttributeValue
 
@@ -12,14 +14,17 @@ def validate_attribute_values(attrs):
     values = attrs.pop("values", [])
     attribute_values = []
     for value in values:
-        attribute = value.get("attribute")
+        value_id = value.get("id")
+        attribute_id = value.get("attribute").get("id")
         try:
             attribute_value = AttributeValue.objects.get(
-                id=value.get("id"),
-                attribute_id=attribute.get("id"),
+                id=value_id,
+                attribute_id=attribute_id,
             )
         except AttributeValue.DoesNotExist:
-            raise Http404
+            raise ValidationError(
+                _("Attribute value not found with id: %s and attribute_id: %s" % (value_id, attribute_id))
+            )
         attribute_values.append(attribute_value)
     attrs["attribute_values"] = attribute_values
     return attrs
@@ -36,14 +41,20 @@ def validate_varianter_attribute_values(attrs):
         varianter_attribute_values = []
         values = variant.pop("values", [])
         for value in values:
-            varianter_attribute = value.get("varianter_attribute")
+            value_id = value.get("id")
+            varianter_attribute_id = value.get("varianter_attribute").get("id")
             try:
                 varianter_attribute_value = VarianterAttributeValue.objects.get(
-                    id=value.get("id"),
-                    varianter_attribute_id=varianter_attribute.get("id"),
+                    id=value_id,
+                    varianter_attribute_id=varianter_attribute_id,
                 )
             except VarianterAttributeValue.DoesNotExist:
-                raise Http404
+                raise ValidationError(
+                    _(
+                        "Varianter attribute value not found with id: %s and varianter_attribute_id: %s"
+                        % (value_id, varianter_attribute_id)
+                    )
+                )
             varianter_attribute_values.append(varianter_attribute_value)
         variant["varianter_attribute_values"] = varianter_attribute_values
     return attrs
