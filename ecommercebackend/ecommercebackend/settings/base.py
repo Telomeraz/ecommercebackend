@@ -13,6 +13,7 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'rest_framework',
     'accounts',
+    'orders',
     'products',
 ]
 
