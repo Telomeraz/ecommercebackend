@@ -74,7 +74,6 @@ class Product(BaseArchive):
     currency = models.CharField(
         max_length=3,
         choices=Currency.choices,
-        default=Currency.TRY,
         verbose_name=_("Currency"),
     )
 
