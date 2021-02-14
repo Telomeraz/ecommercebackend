@@ -1,3 +1,6 @@
+from phonenumber_field.modelfields import PhoneNumberField
+
+from django.contrib.auth.models import User
 from django.core import validators
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -35,3 +38,28 @@ class City(models.Model):
 
     def __str__(self):
         return self.name + ", " + self.country
+
+
+class Address(models.Model):
+    """
+    Stores address infos of user.
+    """
+
+    name = models.CharField(max_length=255, verbose_name=_("Address Name"))
+
+    customer = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    full_address = models.TextField(verbose_name=_("Address"))
+
+    contact_full_name = models.CharField(max_length=255, verbose_name=_("Contact Full Name"))
+
+    contact_phone_number = PhoneNumberField(blank=True, null=True, verbose_name=_("Contact Phone Number"))
+
+    city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True)
+
+    district = models.CharField(max_length=255, verbose_name=_("District"))
+
+    zip_code = models.CharField(max_length=12, verbose_name=_("Zip Code"))
+
+    def __str__(self):
+        return self.name

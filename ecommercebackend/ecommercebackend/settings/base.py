@@ -10,6 +10,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    'phonenumber_field',
     'rest_framework',
     'accounts',
     'products',
