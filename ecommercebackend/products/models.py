@@ -3,7 +3,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from . import managers
-from utils.models import BaseArchive
+from utils.models import BaseArchive, Currency
 
 
 class BaseAttribute(models.Model):
@@ -64,15 +64,6 @@ class Product(BaseArchive):
     """
     Stores product's common infos like name, description etc.
     """
-
-    class Currency(models.TextChoices):
-        """
-        Contains currency choices for prices.
-        """
-
-        USD = "USD", "$"
-        EUR = "EUR", "€"
-        TRY = "TRY", "₺"
 
     name = models.CharField(max_length=255, verbose_name=_("Product name"))
 

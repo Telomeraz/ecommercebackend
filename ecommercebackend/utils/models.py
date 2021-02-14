@@ -22,3 +22,13 @@ class BaseArchive(models.Model):
         """
         self.is_archived = True
         self.save()
+
+
+class Currency(models.TextChoices):
+        """
+        Contains currency choices for prices.
+        """
+
+        USD = "USD", "$"
+        EUR = "EUR", "€"
+        TRY = "TRY", "₺"
