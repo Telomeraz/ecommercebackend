@@ -23,6 +23,10 @@ class Country(models.Model):
         verbose_name=_("Numeric Code"),
     )
 
+    class Meta:
+        verbose_name = _("Country")
+        verbose_name_plural = _("Countries")
+
     def __str__(self):
         return self.name
 
@@ -35,6 +39,10 @@ class City(models.Model):
     name = models.CharField(max_length=255, verbose_name=_("City Name"))
 
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = _("City")
+        verbose_name_plural = _("Cities")
 
     def __str__(self):
         return "{}, {}".format(self.name, self.country)
@@ -60,6 +68,10 @@ class Address(models.Model):
     district = models.CharField(max_length=255, verbose_name=_("District"))
 
     zip_code = models.CharField(max_length=12, verbose_name=_("Zip Code"))
+
+    class Meta:
+        verbose_name = _("Address")
+        verbose_name_plural = _("Addresses")
 
     def __str__(self):
         return self.name
