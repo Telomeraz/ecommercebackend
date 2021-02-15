@@ -37,7 +37,7 @@ class City(models.Model):
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name + ", " + self.country
+        return "{}, {}".format(self.name, self.country)
 
 
 class Address(models.Model):

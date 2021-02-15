@@ -26,7 +26,7 @@ class AttributeValueAdmin(admin.ModelAdmin):
     Admin page of :model:`products.AttributeValue`
     """
 
-    list_display = ( "id", "name", "attribute")
+    list_display = ("id", "name", "attribute")
     search_fields = ("id", "name", "attribute")
 
 
@@ -36,7 +36,7 @@ class VarianterAttributeAdmin(admin.ModelAdmin):
     Admin page of :model:`products.VarianterAttribute`
     """
 
-    list_display = ( "id", "name")
+    list_display = ("id", "name")
     search_fields = ("id", "name")
 
 

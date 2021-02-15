@@ -20,7 +20,7 @@ class Package(models.Model):
         verbose_name_plural = _("Packages")
 
     def __str__(self):
-        return "Packaged at " + self.created_datetime
+        return "Packaged at {}".format(self.created_datetime)
 
 
 class Order(models.Model):
@@ -41,7 +41,7 @@ class Order(models.Model):
         verbose_name_plural = _("Orders")
 
     def __str__(self):
-        return self.customer + "'s order. ID: " + self.id
+        return "{}'s order. ID: {}".format(self.customer.email, self.id)
 
     @property
     def total(self):
@@ -139,12 +139,14 @@ class OrderLine(models.Model):
 
     @property
     def unit_price_excluding_discount(self):
-        return (self.unit_price * 100) / (100 - self.discount_rate)
+        unit_price_excluding_discount = (self.unit_price * 100) / (100 - self.discount_rate)
+        return round(unit_price_excluding_discount, 2)
 
     @property
     def unit_price_excluding_tax(self):
-        return self.unit_price_excluding_discount * (100 - self.tax_rate)
+        unit_price_excluding_tax = self.unit_price_excluding_discount * (100 - self.tax_rate)
+        return round(unit_price_excluding_tax, 2)
 
     @property
     def total_price(self):
-        return self.price * self.quantity
+        return self.unit_price * self.quantity
