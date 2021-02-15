@@ -2,8 +2,8 @@
 
 **Requirements**
 
-- Python 3.8.5
-- PostgreSQL 12.5
+- Python 3.6+
+- PostgreSQL 10+
 - All packages in *requirements.txt*
 
 **PostgreSQL Setup**
