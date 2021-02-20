@@ -13,6 +13,7 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'rest_framework',
     'accounts',
+    'images',
     'orders',
     'products',
 ]
@@ -79,3 +80,7 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = BASE_DIR / 'media'

@@ -1,8 +1,10 @@
+from django.contrib.contenttypes.fields import GenericRelation
 from django.core import validators
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from . import managers
+from images.models import Image
 from utils.models import BaseArchive, Currency
 
 
@@ -157,6 +159,8 @@ class ProductVariant(BaseArchive):
     stock = models.PositiveIntegerField(default=0, verbose_name=_("Stock"))
 
     values = models.ManyToManyField(VarianterAttributeValue, blank=True, related_name="product_variants")
+
+    images = GenericRelation(Image, related_query_name="product_variants")
 
     created_datetime = models.DateTimeField(auto_now_add=True, verbose_name=_("Created Date and Time"))
 
