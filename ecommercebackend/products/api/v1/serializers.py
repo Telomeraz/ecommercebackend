@@ -179,7 +179,7 @@ class CreateProductVariantSerializer(ModelSerializer):
 
     def validate(self, attrs):
         """
-        Validates received product_id and queries a product exist or not and
+        Validates product_id received and queries a product exist or not and
         if exists, sends product object in attrs which will be received in
         validated_data in create function
         """
