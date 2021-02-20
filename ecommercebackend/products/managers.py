@@ -12,10 +12,8 @@ class ProductManager(BaseManager):
         Creates variant(s) for existing product.
         """
         for variant in variants:
-            models.ProductVariant.objects.create(
-                variant=variant,
-                product=product,
-            )
+            variant["product"] = product
+            models.ProductVariant.objects.create(variant=variant)
 
     def create(self, product):
         """
@@ -36,13 +34,13 @@ class ProductVariantManager(BaseManager):
     Custom manager of :model:`products.ProductVariant`.
     """
 
-    def create(self, variant, product):
+    def create(self, variant):
         """
         Gets variant (dict) and product (object of :model:`products.Product`)
         and creates object of :model:`products.ProductVariant`.
         """
         varianter_attribute_values = variant.pop("varianter_attribute_values", [])
-        variant = self.model(**variant, product=product)
+        variant = self.model(**variant)
         variant.save()
         variant.values.add(*varianter_attribute_values)
         return variant

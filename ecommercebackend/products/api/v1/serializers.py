@@ -174,8 +174,7 @@ class CreateProductVariantSerializer(ModelSerializer):
         """
         Creates variant based on product (instance of :model:`products.Product`)
         """
-        product = validated_data.pop("product")
-        product_variant = ProductVariant.objects.create(variant=validated_data, product=product)
+        product_variant = ProductVariant.objects.create(variant=validated_data)
         return product_variant
 
     def validate(self, attrs):
