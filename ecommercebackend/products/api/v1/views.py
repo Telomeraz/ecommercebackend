@@ -17,7 +17,7 @@ class ListProductView(ListAPIView):
     API endpoint that allows products to be viewed.
     """
 
-    queryset = Product.objects.all().order_by("-created_datetime")
+    queryset = Product.objects.all()
     serializer_class = ListCreateProductSerializer
 
 
@@ -34,7 +34,7 @@ class UpdateProductView(Authentication, SuperuserPermission, UpdateAPIView):
     API endpoint that allows products to be updated.
     """
 
-    queryset = Product.objects.all().order_by("-created_datetime")
+    queryset = Product.objects.all()
     serializer_class = UpdateProductSerializer
 
 
@@ -43,7 +43,7 @@ class DeleteProductView(Authentication, SuperuserPermission, DestroyAPIView):
     API endpoint that allows products to be deleted.
     """
 
-    queryset = Product.objects.all().order_by("-created_datetime")
+    queryset = Product.objects.all()
 
     def delete(self, request, *args, **kwargs):
         product = self.get_object()
@@ -64,7 +64,7 @@ class UpdateProductVariantView(Authentication, SuperuserPermission, UpdateAPIVie
     API endpoint that allows product variants to be updated.
     """
 
-    queryset = ProductVariant.objects.all().order_by("-created_datetime")
+    queryset = ProductVariant.objects.all()
     serializer_class = UpdateProductVariantSerializer
 
 
@@ -73,7 +73,7 @@ class DeleteProductVariantView(Authentication, SuperuserPermission, DestroyAPIVi
     API endpoint that allows product variants to be deleted.
     """
 
-    queryset = ProductVariant.objects.all().order_by("-created_datetime")
+    queryset = ProductVariant.objects.all()
 
     def delete(self, request, *args, **kwargs):
         product_variant = self.get_object()
