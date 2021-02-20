@@ -26,6 +26,7 @@ class Country(models.Model):
     class Meta:
         verbose_name = _("Country")
         verbose_name_plural = _("Countries")
+        ordering = ("name",)
 
     def __str__(self):
         return self.name
@@ -43,6 +44,7 @@ class City(models.Model):
     class Meta:
         verbose_name = _("City")
         verbose_name_plural = _("Cities")
+        ordering = ("name",)
 
     def __str__(self):
         return "{}, {}".format(self.name, self.country)
