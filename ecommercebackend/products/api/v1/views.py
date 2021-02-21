@@ -9,7 +9,7 @@ from .serializers import (
     CreateProductVariantSerializer,
     UpdateProductVariantSerializer,
 )
-from utils.views import Authentication, SuperuserPermission
+from utils.views import Authentication, DefaultSuperuserPermission
 
 
 class ListProductView(ListAPIView):
@@ -21,7 +21,7 @@ class ListProductView(ListAPIView):
     serializer_class = ListCreateProductSerializer
 
 
-class CreateProductView(Authentication, SuperuserPermission, CreateAPIView):
+class CreateProductView(Authentication, DefaultSuperuserPermission, CreateAPIView):
     """
     API endpoint that allows products to be created.
     """
@@ -29,7 +29,7 @@ class CreateProductView(Authentication, SuperuserPermission, CreateAPIView):
     serializer_class = ListCreateProductSerializer
 
 
-class UpdateProductView(Authentication, SuperuserPermission, UpdateAPIView):
+class UpdateProductView(Authentication, DefaultSuperuserPermission, UpdateAPIView):
     """
     API endpoint that allows products to be updated.
     """
@@ -38,7 +38,7 @@ class UpdateProductView(Authentication, SuperuserPermission, UpdateAPIView):
     serializer_class = UpdateProductSerializer
 
 
-class DeleteProductView(Authentication, SuperuserPermission, DestroyAPIView):
+class DeleteProductView(Authentication, DefaultSuperuserPermission, DestroyAPIView):
     """
     API endpoint that allows products to be deleted.
     """
@@ -51,7 +51,7 @@ class DeleteProductView(Authentication, SuperuserPermission, DestroyAPIView):
         return Response(status=HTTP_204_NO_CONTENT)
 
 
-class CreateProductVariantView(Authentication, SuperuserPermission, CreateAPIView):
+class CreateProductVariantView(Authentication, DefaultSuperuserPermission, CreateAPIView):
     """
     API endpoint that allows product variants to be created.
     """
@@ -59,7 +59,7 @@ class CreateProductVariantView(Authentication, SuperuserPermission, CreateAPIVie
     serializer_class = CreateProductVariantSerializer
 
 
-class UpdateProductVariantView(Authentication, SuperuserPermission, UpdateAPIView):
+class UpdateProductVariantView(Authentication, DefaultSuperuserPermission, UpdateAPIView):
     """
     API endpoint that allows product variants to be updated.
     """
@@ -68,7 +68,7 @@ class UpdateProductVariantView(Authentication, SuperuserPermission, UpdateAPIVie
     serializer_class = UpdateProductVariantSerializer
 
 
-class DeleteProductVariantView(Authentication, SuperuserPermission, DestroyAPIView):
+class DeleteProductVariantView(Authentication, DefaultSuperuserPermission, DestroyAPIView):
     """
     API endpoint that allows product variants to be deleted.
     """

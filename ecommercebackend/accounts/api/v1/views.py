@@ -1,55 +1,43 @@
-from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
+from rest_framework.generics import ListCreateAPIView, UpdateAPIView, DestroyAPIView
 
 from .serializers import CountrySerializer, ListUpdateCitySerializer, CreateCitySerializer
 from accounts.models import Country, City
-from utils.views import Authentication, SuperuserPermission
+from utils.views import Authentication, DefaultSuperuserPermission
 
 
-class ListCountryView(ListAPIView):
-    """
-    API endpoint that allows countries to be viewed.
-    """
-
-    queryset = Country.objects.all()
-    serializer_class = CountrySerializer
-
-
-class CreateUpdateDeleteCountryView(
+class CountryView(
     Authentication,
-    SuperuserPermission,
-    CreateAPIView,
+    DefaultSuperuserPermission,
+    ListCreateAPIView,
     UpdateAPIView,
     DestroyAPIView,
 ):
     """
-    API endpoint that allows countries to be created, updated and deleted.
+    API endpoint that allows countries to be viewed, created, updated and
+    deleted.
     """
 
+    admin_methods = ("POST", "PUT", "PATCH", "DELETE")
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
 
 
-class ListCityView(ListAPIView):
+class CityView(
+    Authentication,
+    DefaultSuperuserPermission,
+    ListCreateAPIView,
+    UpdateAPIView,
+    DestroyAPIView,
+):
     """
-    API endpoint that allows cities to be viewed.
+    API endpoint that allows cities to be viewed, created, updated and
+    deleted.
     """
 
+    admin_methods = ("POST", "PUT", "PATCH", "DELETE")
     queryset = City.objects.all()
-    serializer_class = ListUpdateCitySerializer
 
-
-class CreateCityView(Authentication, SuperuserPermission, CreateAPIView):
-    """
-    API endpoint that allows cities to be created.
-    """
-
-    serializer_class = CreateCitySerializer
-
-
-class UpdateDeleteCityView(Authentication, SuperuserPermission, UpdateAPIView, DestroyAPIView):
-    """
-    API endpoint that allows cities to be updated and deleted.
-    """
-
-    queryset = City.objects.all()
-    serializer_class = ListUpdateCitySerializer
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            return CreateCitySerializer
+        return ListUpdateCitySerializer

@@ -1,26 +1,26 @@
 from rest_framework.authentication import BasicAuthentication
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.permissions import IsAdminUser, AllowAny
 
 
 class Authentication:
     """
-    Authenticates users.
+    If request.method is GET method, then no auth needed otherwise uses an
+    authentication
     """
 
-    authentication_classes = (BasicAuthentication,)
+    def get_authenticators(self):
+        if self.request.method == "GET":
+            return
+        return (BasicAuthentication(),)
 
 
-class SuperuserPermission:
+class DefaultSuperuserPermission:
     """
-    Checks if superuser has permission to access
-    """
-
-    permission_classes = (IsAdminUser,)
-
-
-class UserPermission:
-    """
-    Checks if user has permission to access
+    If request method is one of admin_methods, allows only admin users
+    otherwise allows anyone.
     """
 
-    permission_classes = (IsAuthenticated,)
+    def get_permissions(self):
+        if self.request.method in self.admin_methods:
+            return (IsAdminUser(),)
+        return (AllowAny(),)
