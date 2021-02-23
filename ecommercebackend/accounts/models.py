@@ -63,7 +63,7 @@ class Address(models.Model):
 
     contact_full_name = models.CharField(max_length=255, verbose_name=_("Contact Full Name"))
 
-    contact_phone_number = PhoneNumberField(blank=True, null=True, verbose_name=_("Contact Phone Number"))
+    contact_phone_number = PhoneNumberField(blank=True, verbose_name=_("Contact Phone Number"))
 
     city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True)
 
