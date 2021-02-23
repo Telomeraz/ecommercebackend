@@ -13,7 +13,7 @@ class Package(models.Model):
     by using this model for shipment processes.
     """
 
-    created_datetime = models.DateTimeField(auto_now_add=True, verbose_name=_("Created Date and Time"))
+    created_datetime = models.DateTimeField(auto_now_add=True, verbose_name=_("Created date and time"))
 
     class Meta:
         verbose_name = _("Package")
@@ -30,11 +30,11 @@ class Order(models.Model):
 
     customer = models.ForeignKey(User, on_delete=models.PROTECT, related_name="orders")
 
-    shipping_address = models.JSONField(verbose_name=_("Shipping Address"))
+    shipping_address = models.JSONField(verbose_name=_("Shipping address"))
 
-    billing_address = models.JSONField(verbose_name=_("Billing Address"))
+    billing_address = models.JSONField(verbose_name=_("Billing address"))
 
-    created_datetime = models.DateTimeField(auto_now_add=True, verbose_name=_("Created Date and Time"))
+    created_datetime = models.DateTimeField(auto_now_add=True, verbose_name=_("Created date and time"))
 
     class Meta:
         verbose_name = _("Order")

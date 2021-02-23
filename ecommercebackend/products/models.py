@@ -86,7 +86,7 @@ class Product(BaseArchive):
 
     values = models.ManyToManyField(AttributeValue, blank=True, related_name="products")
 
-    created_datetime = models.DateTimeField(auto_now_add=True, verbose_name=_("Created Date and Time"))
+    created_datetime = models.DateTimeField(auto_now_add=True, verbose_name=_("Created date and time"))
 
     is_active = models.BooleanField(default=True, verbose_name=_("Is product active?"))
 
@@ -162,7 +162,7 @@ class ProductVariant(BaseArchive):
 
     images = GenericRelation(Image, related_query_name="product_variants")
 
-    created_datetime = models.DateTimeField(auto_now_add=True, verbose_name=_("Created Date and Time"))
+    created_datetime = models.DateTimeField(auto_now_add=True, verbose_name=_("Created date and time"))
 
     is_primary = models.BooleanField(default=False, verbose_name=_("Is variant primary?"))
 

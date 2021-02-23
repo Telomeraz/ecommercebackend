@@ -13,16 +13,16 @@ class Country(models.Model):
     Stores country's infos.
     """
 
-    name = models.CharField(max_length=255, unique=True, verbose_name=_("Country Name"))
+    name = models.CharField(max_length=255, unique=True, verbose_name=_("Country name"))
 
-    alpha2_code = models.CharField(max_length=2, unique=True, verbose_name=_("Alpha-2 Code"))
+    alpha2_code = models.CharField(max_length=2, unique=True, verbose_name=_("Alpha-2 code"))
 
-    alpha3_code = models.CharField(max_length=3, unique=True, verbose_name=_("Alpha-3 Code"))
+    alpha3_code = models.CharField(max_length=3, unique=True, verbose_name=_("Alpha-3 code"))
 
     numeric_code = models.PositiveSmallIntegerField(
         validators=(validators.MaxValueValidator(999),),
         unique=True,
-        verbose_name=_("Numeric Code"),
+        verbose_name=_("Numeric code"),
     )
 
     class Meta:
@@ -84,21 +84,21 @@ class Address(models.Model):
     Stores address infos of user.
     """
 
-    name = models.CharField(max_length=255, verbose_name=_("Address Name"))
+    name = models.CharField(max_length=255, verbose_name=_("Address name"))
 
     customer = models.ForeignKey(User, on_delete=models.CASCADE)
 
     full_address = models.TextField(verbose_name=_("Address"))
 
-    contact_full_name = models.CharField(max_length=255, verbose_name=_("Contact Full Name"))
+    contact_full_name = models.CharField(max_length=255, verbose_name=_("Contact full name"))
 
-    contact_phone_number = PhoneNumberField(blank=True, verbose_name=_("Contact Phone Number"))
+    contact_phone_number = PhoneNumberField(blank=True, verbose_name=_("Contact phone number"))
 
     city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True)
 
     district = models.CharField(max_length=255, verbose_name=_("District"))
 
-    zip_code = models.CharField(max_length=12, verbose_name=_("Zip Code"))
+    zip_code = models.CharField(max_length=12, verbose_name=_("Zip code"))
 
     class Meta:
         verbose_name = _("Address")
