@@ -11,7 +11,7 @@ class OrderAdmin(admin.ModelAdmin):
 
     list_display = (
         "id",
-        "customer",
+        "owner",
         "shipping_address",
         "billing_address",
         "total",

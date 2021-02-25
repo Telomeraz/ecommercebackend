@@ -1,7 +1,8 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 
 
-class BaseManager(models.Manager):
+class ArchiveManager(models.Manager):
     """
     Custom manager that filters common fields.
     """
@@ -21,3 +22,14 @@ class BaseManager(models.Manager):
         if self.all_objects:
             return queryset
         return self._filter_archived(queryset)
+
+
+class OwnerManager(models.Manager):
+    """
+    Contains customer filters for models which inherit
+    :model:`utils.OwnerMixin`.
+    """
+    def filter_by_owner(self, owner):
+        if isinstance(owner, get_user_model()) and owner.is_superuser:
+            return self.get_queryset()
+        return self.get_queryset().filter(owner=owner)

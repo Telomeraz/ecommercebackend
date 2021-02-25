@@ -1,8 +1,8 @@
 from . import models
-from utils.managers import BaseManager
+from utils.managers import ArchiveManager
 
 
-class ProductManager(BaseManager):
+class ProductManager(ArchiveManager):
     """
     Custom manager of :model:`products.Product`.
     """
@@ -29,7 +29,7 @@ class ProductManager(BaseManager):
         return product
 
 
-class ProductVariantManager(BaseManager):
+class ProductVariantManager(ArchiveManager):
     """
     Custom manager of :model:`products.ProductVariant`.
     """

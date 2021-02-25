@@ -1,10 +1,10 @@
-from django.contrib.auth.models import User
 from django.core import validators
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from products.models import Product
-from utils.models import Currency
+from orders import managers
+from utils.models import Currency, OwnerMixin
 
 
 class Package(models.Model):
@@ -23,18 +23,18 @@ class Package(models.Model):
         return "Packaged at {}".format(self.created_datetime)
 
 
-class Order(models.Model):
+class Order(OwnerMixin):
     """
-    Stores order's infos like addresses, customer etc.
+    Stores order's infos like addresses, owner etc.
     """
-
-    customer = models.ForeignKey(User, on_delete=models.PROTECT, related_name="orders")
 
     shipping_address = models.JSONField(verbose_name=_("Shipping address"))
 
     billing_address = models.JSONField(verbose_name=_("Billing address"))
 
     created_datetime = models.DateTimeField(auto_now_add=True, verbose_name=_("Created date and time"))
+
+    objects = managers.OrderManager()
 
     class Meta:
         verbose_name = _("Order")

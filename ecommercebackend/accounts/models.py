@@ -1,11 +1,17 @@
 from phonenumber_field.modelfields import PhoneNumberField
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
+from django.contrib.contenttypes.fields import GenericRelation
 from django.core import validators
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from utils.models import BaseArchive
+from accounts import managers
+from utils.models import AbstractArchive, OwnerMixin
+
+
+class User(AbstractUser):
+    pass
 
 
 class Country(models.Model):
@@ -52,41 +58,12 @@ class City(models.Model):
         return "{}, {}".format(self.name, self.country)
 
 
-class Customer(BaseArchive):
-    """
-    Stores customer infos. This model is used for non-user orders. If an order
-    is third-party software order or manuel order which is created by admin,
-    this model should be used for customer infos of those type of orders.
-    """
-
-    first_name = models.CharField(max_length=255, blank=True, verbose_name=_('First name'))
-
-    last_name = models.CharField(max_length=255, blank=True, verbose_name=_('Last name'))
-
-    email = models.EmailField(_('Email address'), blank=True)
-
-    phone_number = PhoneNumberField(blank=True, verbose_name=_("Contact phone number"))
-
-    class Meta:
-        verbose_name = _("Customer")
-        verbose_name_plural = _("Customers")
-
-    def __str__(self):
-        return self.full_name
-
-    @property
-    def full_name(self):
-        return "{} {}".format(self.first_name, self.last_name)
-
-
-class Address(models.Model):
+class Address(AbstractArchive, OwnerMixin):
     """
     Stores address infos of user.
     """
 
     name = models.CharField(max_length=255, verbose_name=_("Address name"))
-
-    customer = models.ForeignKey(User, on_delete=models.CASCADE)
 
     full_address = models.TextField(verbose_name=_("Address"))
 
@@ -100,9 +77,39 @@ class Address(models.Model):
 
     zip_code = models.CharField(max_length=12, verbose_name=_("Zip code"))
 
+    objects = managers.AddressManager()
+    all_objects = managers.AddressManager(all_objects=True)
+
     class Meta:
         verbose_name = _("Address")
         verbose_name_plural = _("Addresses")
 
     def __str__(self):
         return self.name
+
+
+class Customer(AbstractArchive):
+    """
+    Stores customer infos. This model is used for non-user orders. If an order
+    is third-party software order or manuel order which is created by admin,
+    this model should be used for customer infos of those type of orders.
+    """
+
+    first_name = models.CharField(max_length=255, blank=True, verbose_name=_("First name"))
+
+    last_name = models.CharField(max_length=255, blank=True, verbose_name=_("Last name"))
+
+    email = models.EmailField(_("Email address"), blank=True)
+
+    phone_number = PhoneNumberField(blank=True, verbose_name=_("Contact phone number"))
+
+    class Meta:
+        verbose_name = _("Customer")
+        verbose_name_plural = _("Customers")
+
+    def __str__(self):
+        return self.full_name
+
+    @property
+    def full_name(self):
+        return "{} {}".format(self.first_name, self.last_name)

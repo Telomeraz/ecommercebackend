@@ -1,6 +1,10 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 
-from .models import Country, City, Address
+from .models import Country, City, Address, User
+
+
+admin.site.register(User, UserAdmin)
 
 
 @admin.register(Country)
@@ -32,7 +36,9 @@ class AddressAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "name",
-        "customer",
+        "owner_content_type",
+        "owner_object_id",
+        "owner",
         "full_address",
         "contact_full_name",
         "contact_phone_number",

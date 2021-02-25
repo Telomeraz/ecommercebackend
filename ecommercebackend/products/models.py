@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from . import managers
 from images.models import Image
-from utils.models import BaseArchive, Currency
+from utils.models import AbstractArchive, Currency
 
 
 class BaseAttribute(models.Model):
@@ -62,7 +62,7 @@ class VarianterAttributeValue(BaseAttribute):
     )
 
 
-class Product(BaseArchive):
+class Product(AbstractArchive):
     """
     Stores product's common infos like name, description etc.
     """
@@ -116,7 +116,7 @@ class Product(BaseArchive):
         product_variants.do_archive()
 
 
-class ProductVariant(BaseArchive):
+class ProductVariant(AbstractArchive):
     """
     Stores product's non-common infos like price, stock etc.
     """
