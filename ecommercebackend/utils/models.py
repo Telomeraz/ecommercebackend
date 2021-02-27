@@ -4,7 +4,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
-class AbstractArchive(models.Model):
+class ArchiveMixin(models.Model):
     """
     Use this abstract model when you have important data like product,
     product_variant etc. So, you won't delete objects, you'll archive them.

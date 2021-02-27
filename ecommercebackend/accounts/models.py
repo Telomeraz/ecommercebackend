@@ -7,7 +7,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from accounts import managers
-from utils.models import AbstractArchive, OwnerMixin
+from utils.models import ArchiveMixin, OwnerMixin
 
 
 class User(AbstractUser):
@@ -58,7 +58,7 @@ class City(models.Model):
         return "{}, {}".format(self.name, self.country)
 
 
-class Address(AbstractArchive, OwnerMixin):
+class Address(ArchiveMixin, OwnerMixin):
     """
     Stores address infos of user.
     """
@@ -88,7 +88,7 @@ class Address(AbstractArchive, OwnerMixin):
         return self.name
 
 
-class Customer(AbstractArchive):
+class Customer(ArchiveMixin):
     """
     Stores customer infos. This model is used for non-user orders. If an order
     is third-party software order or manuel order which is created by admin,
