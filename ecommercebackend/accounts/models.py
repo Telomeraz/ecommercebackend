@@ -11,7 +11,16 @@ from utils.models import ArchiveMixin, OwnerMixin
 
 
 class User(AbstractUser):
-    pass
+    """
+    Stores user infos.
+    """
+
+    class Meta:
+        verbose_name = _("User")
+        verbose_name_plural = _("Users")
+
+    def __str__(self):
+        return self.email
 
 
 class Country(models.Model):
