@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .models import Country, City, Address, User
+from .models import Country, City, Address, User, Customer
 
 
 admin.site.register(User, UserAdmin)
@@ -46,4 +46,21 @@ class AddressAdmin(admin.ModelAdmin):
         "district",
         "zip_code",
     )
-    search_fields = ("id", "name", "customer")
+    search_fields = ("id", "name", "owner")
+
+
+@admin.register(Customer)
+class CustomerAdmin(admin.ModelAdmin):
+    """
+    Admin page of :model:`accounts.Customer`
+    """
+
+    list_display = (
+        "id",
+        "first_name",
+        "last_name",
+        "email",
+        "phone_number",
+        "is_archived",
+    )
+    search_fields = ("id", "full_name", "email")
