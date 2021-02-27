@@ -42,7 +42,7 @@ class OwnerMixin(models.Model):
     :model:`accounts.User` or :model:`accounts.Customer`.
     """
 
-    owner_limit = models.Q(app_label="accounts", model="Customer") | models.Q(app_label="accounts", model="User")
+    owner_limit = models.Q(app_label="accounts", model="customer") | models.Q(app_label="accounts", model="user")
 
     owner_content_type = models.ForeignKey(
         ContentType,
