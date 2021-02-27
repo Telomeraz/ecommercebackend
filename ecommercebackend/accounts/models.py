@@ -7,20 +7,8 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from accounts import managers
+from orders.models import Order
 from utils.models import ArchiveMixin, OwnerMixin
-
-
-class User(AbstractUser):
-    """
-    Stores user infos.
-    """
-
-    class Meta:
-        verbose_name = _("User")
-        verbose_name_plural = _("Users")
-
-    def __str__(self):
-        return self.email
 
 
 class Country(models.Model):
@@ -97,7 +85,45 @@ class Address(ArchiveMixin, OwnerMixin):
         return self.name
 
 
-class Customer(ArchiveMixin):
+class BaseOwner(models.Model):
+    """
+    Stores common fields and features of owner.
+    """
+
+    addresses = GenericRelation(
+        Address,
+        content_type_field="owner_content_type",
+        object_id_field="owner_object_id",
+    )
+
+    orders = GenericRelation(
+        Order,
+        content_type_field="owner_content_type",
+        object_id_field="owner_object_id",
+    )
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return self.full_name
+
+    @property
+    def full_name(self):
+        return "{} {}".format(self.first_name, self.last_name)
+
+
+class User(BaseOwner, AbstractUser):
+    """
+    Stores user infos.
+    """
+
+    class Meta:
+        verbose_name = _("User")
+        verbose_name_plural = _("Users")
+
+
+class Customer(BaseOwner, ArchiveMixin):
     """
     Stores customer infos. This model is used for non-user orders. If an order
     is third-party software order or manuel order which is created by admin,
@@ -115,10 +141,3 @@ class Customer(ArchiveMixin):
     class Meta:
         verbose_name = _("Customer")
         verbose_name_plural = _("Customers")
-
-    def __str__(self):
-        return self.full_name
-
-    @property
-    def full_name(self):
-        return "{} {}".format(self.first_name, self.last_name)
