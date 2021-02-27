@@ -113,7 +113,7 @@ class BaseOwner(models.Model):
         return "{} {}".format(self.first_name, self.last_name)
 
 
-class User(BaseOwner, AbstractUser):
+class User(BaseOwner, ArchiveMixin, AbstractUser):
     """
     Stores user infos.
     """
