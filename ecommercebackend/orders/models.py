@@ -4,23 +4,8 @@ from django.utils.translation import gettext_lazy as _
 
 from products.models import Product
 from orders import managers
+from shipping.models import Package
 from utils.models import Currency, OwnerMixin
-
-
-class Package(models.Model):
-    """
-    Stands for packaging order lines. You can package one or more order lines
-    by using this model for shipment processes.
-    """
-
-    created_datetime = models.DateTimeField(auto_now_add=True, verbose_name=_("Created date and time"))
-
-    class Meta:
-        verbose_name = _("Package")
-        verbose_name_plural = _("Packages")
-
-    def __str__(self):
-        return "Packaged at {}".format(self.created_datetime)
 
 
 class Order(OwnerMixin):
